@@ -1,10 +1,18 @@
 ---
 name: RepoLayer
-role: （一句话描述待补充）
-stack: []
-links: []
+role: 给 AI agent 用的跨仓库代码索引层 —— 索引一次，像查数据库一样查代码，比 grep 信噪比高、比读整个文件省 token
+stack: [Rust, SQLite, tree-sitter, ast-grep, sqlite-vec, BM25]
+links:
+  - label: GitHub
+    url: https://github.com/zhousiyao03-cyber/repolayer
 featured: true
 order: 2
 ---
 
-（项目说明待补充。）
+跨仓库的代码索引 CLI：把多个仓库索引进 `.repolayer/` 下的 SQLite，
+提供符号查找、who-calls-this、IDL（protobuf / thrift）方法到服务端/客户端的调用追踪，
+以及 BM25 + 语义混合检索。支持 10 种语言适配器，单个静态二进制。
+
+基于 [aeroxy/ast-outline](https://github.com/aeroxy/ast-outline) 扩展：
+加入多仓库工作区、把 IDL 作为一等图节点、以及跨仓库的
+Implements / Invokes / Imports / Calls 调用边。

@@ -1,0 +1,21 @@
+---
+name: minisearch-rs
+role: 用 Rust 从零写的轻量 BM25 全文搜索引擎，原生与浏览器（wasm）共用一套 API
+stack: [Rust, WebAssembly, BM25, bincode, serde]
+links:
+  - label: Live demo
+    url: https://zhousiyao03-cyber.github.io/minisearch-rs/
+  - label: GitHub
+    url: https://github.com/zhousiyao03-cyber/minisearch-rs
+featured: false
+order: 7
+---
+
+可嵌入的 BM25 全文搜索引擎，为练 Rust 和 wasm 而从零写的。
+
+- **小**：约 1k 行纯 Rust，无 `unsafe`，wasm 产物 ~170 KB（gzip 后 ~74 KB）。
+- **自包含**：单个索引文件（`bincode 2`），无服务、无守护进程、无 schema。
+- **面向小语料**：为「几千篇文档、低 MB」的场景而做——这种规模上 tantivy 或 Meilisearch 都太重。
+- **原生 / wasm 同一套 API**：今天在 CLI 里检索，明天就能搬到浏览器，demo 端到端查询 ~0.1 ms。
+
+Lucene 风味的 BM25 排序（可调 `k1` / `b`），Unicode 分词，按字节偏移高亮的片段提取。

@@ -1,10 +1,20 @@
 ---
-name: Meeting Assistant
-role: （一句话描述待补充）
-stack: []
-links: []
+name: Meeting Copilot
+role: macOS 实时会议助手 —— 本地转录、滚动摘要，并在合适的时机提示该说什么
+stack: [Tauri, Rust, React, sherpa-onnx, SenseVoice, SQLite]
+links:
+  - label: GitHub
+    url: https://github.com/zhousiyao03-cyber/meeting-assistant
 featured: false
 order: 6
 ---
 
-（项目说明待补充。）
+常驻置顶的小面板，跟视频会议软件并排运行。
+
+- **实时转录**：本地 SenseVoice 模型（sherpa-onnx）+ Silero VAD，支持中英日韩粤。
+- **说话人区分**：双声道识别麦克风（"我"）与系统音频（"对方"），含回声抑制与跨声道去重。
+- **滚动摘要**：每 30 秒由 LLM 生成一次会议摘要。
+- **发言建议**：检测可插话的时机（提问、停顿、关键词），并提示该说什么。
+- **隐私优先**：语音识别 100% 本地运行，音频不出本机，只有转录文本会发给 LLM。
+
+会议结束自动生成标题、要点与待办，存入本地 SQLite，可导出 Markdown。
