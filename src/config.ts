@@ -1,8 +1,8 @@
 export const SITE = {
   title: 'zeusyao',
   /** 首页/导航下方的一句话定位 */
-  role: 'Frontend Engineer · Singapore',
-  description: '前端工程师 @ 新加坡，在折腾 AI agent。这里记录写作、项目与学习。',
+  role: 'Programmer · Singapore',
+  description: '新加坡的程序员。这里记录写作、项目与学习。',
   author: 'zeusyao',
   url: 'https://zeusyao.github.io',
   lang: 'zh-CN',
