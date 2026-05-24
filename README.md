@@ -38,7 +38,8 @@ draft: false        # true 则不发布
 
 ## 路线图
 
-- v1（当前）：首页 / Blog / Projects / About，深浅色、TOC、RSS、SEO。
+- v1（当前）：首页 / Blog / Projects / About / 标签页，深浅色、文章目录、阅读时长、上下篇导航、代码块双主题、RSS、sitemap、SEO/OG、无障碍。
+- v1.1（备选）：每篇文章自动生成 OG 社交分享图（需引入中文字体子集）。
 - v2：「跟博客对话」AI（轻量 RAG + Claude API），接口部署在自有服务器。
 
 ## 技术栈
