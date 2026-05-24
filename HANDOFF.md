@@ -5,10 +5,14 @@
 
 ## 当前状态
 
-- 分支 `main`，工作区干净，全部已提交。`npm run build` / `npm run check` 均通过，0 死链。
-- **尚未推到 GitHub**（本地仓库）。
+- 分支 `main`，工作区干净。`npm run build` / `npm run check` 均通过，0 死链。
+- **已部署上线**：<https://zhousiyao03-cyber.github.io>（2026-05-24）。
+  - GitHub 账号是 **`zhousiyao03-cyber`**（不是 zeusyao），仓库 `zhousiyao03-cyber/zhousiyao03-cyber.github.io`，域名随之改。
+  - Pages 用 GitHub Actions 构建（`build_type=workflow`，已通过 `gh api` 设好），workflow 是 `.github/workflows/deploy.yml`，push main 自动部署。
+  - 注意：仓库 Actions 里那条 `pages-build-deployment`(默认 Jekyll 流程) 会 failure，无害，真正生效的是 `deploy.yml`。
 - 站点结构：首页 / Blog（列表+详情+标签页）/ Projects / About / 404 / RSS / sitemap。
 - 已有功能：深浅色（无闪烁）、文章目录、阅读时长、上下篇导航、代码块双主题、SEO/OG、skip link 等无障碍。
+- **展示用 title/author 仍叫 `zeusyao`**（笔名，对外展示，与 GitHub 用户名无关，刻意保留）。
 
 ## 重要约定（别违反）
 
@@ -16,19 +20,22 @@
 2. **项目只列原创**：`wanman`（fork）和 `web-bro`（在 aeroxy 名下）已排除，别加回来。`Noesis` 是 nanoGPT 的 fork，措辞保持"基于 nanoGPT"，不冒充原创。
 3. **v1 不做 AI、不做后端**。「跟博客对话」AI 留到 v2，接口部署在用户自有的 knosi 服务器（`ssh knosi`）。
 
-## 待用户补充 / 决定（open items）
+## 已完成的 open items（2026-05-24 收尾）
 
-1. **RepoLayer、Meeting Assistant 的描述**：现在是占位「（一句话描述待补充）」、空 stack。文件在 `src/content/projects/repolayer.mdx`、`meeting-assistant.mdx`。需要用户给：一句话 + 技术栈 + 链接。
-2. **社交链接**：用户想加 LinkedIn 等。改 `src/config.ts` 的 `SOCIAL`（页脚 + 首页 hero 会显示）。需要真实 URL。
-3. **GitHub 用户名存疑**：现填 `github.com/zeusyao`，但 focus-tracker 的 release 在 `zhousiyao03-cyber` 名下。需用户确认；GitHub Pages 域名 `zeusyao.github.io` 要求账号叫 `zeusyao`。
-4. **部署**（要用户的 GitHub 账号）：
-   - `gh repo create zeusyao.github.io --public --source . --remote origin --push`
-   - GitHub 仓库 Settings → Pages → Source 选「GitHub Actions」。
+1. ~~RepoLayer / Meeting Assistant 描述~~ → 已据各仓库 README 补全。Meeting Assistant 正名为 **Meeting Copilot**（仓库真实名）。RepoLayer 按约定标注「基于 aeroxy/ast-outline 扩展」，不冒充原创。
+2. ~~社交链接~~ → `config.ts` 的 `SOCIAL` 已加 LinkedIn(`siyao-zhou-759b12159`)、X(`zeusyaoyao`)。GitHub 链接指向 `zhousiyao03-cyber`。
+3. ~~GitHub 用户名~~ → 确认是 **`zhousiyao03-cyber`**，全站 url/githubUser/astro site/robots.txt 已统一切换。
+4. ~~部署~~ → 已建仓推送并上线（见「当前状态」）。
+5. 顺手新增项目 **minisearch-rs**（非精选，order 7）：Rust 从零写的 BM25 全文搜索引擎，有 live demo。
+
+## 当前没有待办的 open items
+
+下一步可选方向见下方 Roadmap。
 
 ## 项目展示当前编排
 
 - 首页精选（order）：Knosi(1) → RepoLayer(2) → SGLifeSim(3)
-- Projects 页另含（非精选）：Noesis(4)、Focus Tracker(5)、Meeting Assistant(6)
+- Projects 页另含（非精选）：Noesis(4)、Focus Tracker(5)、Meeting Copilot(6)、minisearch-rs(7)
 
 ## Roadmap / 想法
 
