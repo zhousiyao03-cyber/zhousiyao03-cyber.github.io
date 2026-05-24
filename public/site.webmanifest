@@ -1,0 +1,9 @@
+{
+  "name": "zeusyao",
+  "short_name": "zeusyao",
+  "icons": [{ "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any" }],
+  "theme_color": "#09090b",
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "start_url": "/"
+}
