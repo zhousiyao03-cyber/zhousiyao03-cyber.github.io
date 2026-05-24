@@ -18,6 +18,19 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 尊重系统的"减少动效"偏好 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 ::selection {
   background-color: color-mix(in srgb, var(--color-accent) 25%, transparent);
 }
