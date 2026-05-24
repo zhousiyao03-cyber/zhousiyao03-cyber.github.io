@@ -1,0 +1,29 @@
+---
+import type { MarkdownHeading } from 'astro';
+interface Props {
+  headings: MarkdownHeading[];
+}
+const { headings } = Astro.props;
+// 只展示 h2 / h3
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+{items.length > 0 && (
+  <nav
+    aria-label="目录"
+    class="mb-10 rounded-lg border border-zinc-200 bg-zinc-50 p-4 text-sm dark:border-zinc-800 dark:bg-zinc-900/50"
+  >
+    <p class="mb-2 font-mono text-xs uppercase tracking-wider text-zinc-400">目录</p>
+    <ul class="space-y-1.5">
+      {items.map((h) => (
+        <li class:list={[h.depth === 3 && 'pl-4']}>
+          <a
+            href={`#${h.slug}`}
+            class="text-zinc-500 transition-colors hover:text-accent dark:text-zinc-400 dark:hover:text-accent-soft"
+          >
+            {h.text}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

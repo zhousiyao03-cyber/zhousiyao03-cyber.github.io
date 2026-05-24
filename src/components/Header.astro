@@ -1,20 +1,27 @@
 ---
-import { SITE, NAV } from '../config';
+import { NAV } from '../config';
 import ThemeToggle from './ThemeToggle.astro';
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
 ---
-<header class="border-b border-zinc-200 dark:border-zinc-800">
-  <div class="mx-auto flex max-w-2xl items-center justify-between px-4 py-4">
-    <a href="/" class="font-semibold tracking-tight">{SITE.title}</a>
-    <nav class="flex items-center gap-1 text-sm">
+<header
+  class="sticky top-0 z-10 border-b border-zinc-200/70 bg-white/80 backdrop-blur dark:border-zinc-800/70 dark:bg-zinc-950/80"
+>
+  <div class="mx-auto flex max-w-2xl items-center justify-between px-4 py-3.5">
+    <a href="/" class="font-mono text-sm font-semibold tracking-tight">
+      zeusyao<span class="text-accent dark:text-accent-soft">.</span>
+    </a>
+    <nav class="flex items-center gap-0.5 font-mono text-[13px]">
       {NAV.map((item) => (
         <a
           href={item.href}
+          aria-current={isActive(item.href) ? 'page' : undefined}
           class:list={[
-            'rounded-md px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800',
-            isActive(item.href) ? 'font-medium text-zinc-900 dark:text-zinc-100' : 'text-zinc-500 dark:text-zinc-400',
+            'rounded-md px-2.5 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800',
+            isActive(item.href)
+              ? 'text-accent dark:text-accent-soft'
+              : 'text-zinc-500 dark:text-zinc-400',
           ]}
         >
           {item.label}

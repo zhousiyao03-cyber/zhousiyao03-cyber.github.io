@@ -1,9 +1,67 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import PostCard from '../components/PostCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { SITE, SOCIAL } from '../config';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 4);
+
+const projects = (await getCollection('projects', ({ data }) => data.featured)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
 ---
-<BaseLayout title="Home">
-  <main class="mx-auto max-w-2xl px-4 py-16">
-    <h1 class="text-3xl font-bold">zeusyao</h1>
-    <p class="mt-2 text-zinc-600 dark:text-zinc-400">骨架占位，后续替换。</p>
+<BaseLayout>
+  <main class="mx-auto max-w-2xl px-4 py-14">
+    {/* Hero */}
+    <section>
+      <h1 class="text-4xl font-bold tracking-tight">嗨，我是 {SITE.title}</h1>
+      <p class="mt-2 font-mono text-sm text-accent dark:text-accent-soft">{SITE.role}</p>
+      <p class="mt-5 leading-relaxed text-zinc-600 dark:text-zinc-300">{SITE.description}</p>
+      <div class="mt-5 flex gap-4 font-mono text-[13px]">
+        {SOCIAL.map((s) => (
+          <a
+            href={s.href}
+            class="text-zinc-500 transition-colors hover:text-accent dark:text-zinc-400 dark:hover:text-accent-soft"
+          >
+            {s.label} ↗
+          </a>
+        ))}
+      </div>
+    </section>
+
+    {/* 最新文章 */}
+    <section class="mt-16">
+      <div class="flex items-baseline justify-between">
+        <h2 class="font-mono text-sm uppercase tracking-widest text-zinc-400">// 最新文章</h2>
+        <a
+          href="/blog"
+          class="font-mono text-[13px] text-zinc-500 transition-colors hover:text-accent dark:hover:text-accent-soft"
+        >
+          全部 →
+        </a>
+      </div>
+      <div class="mt-3 divide-y divide-zinc-100 dark:divide-zinc-800/70">
+        {posts.map((post) => <PostCard post={post} />)}
+      </div>
+    </section>
+
+    {/* 精选项目 */}
+    <section class="mt-16">
+      <div class="flex items-baseline justify-between">
+        <h2 class="font-mono text-sm uppercase tracking-widest text-zinc-400">// 精选项目</h2>
+        <a
+          href="/projects"
+          class="font-mono text-[13px] text-zinc-500 transition-colors hover:text-accent dark:hover:text-accent-soft"
+        >
+          全部 →
+        </a>
+      </div>
+      <div class="mt-5 grid gap-4 sm:grid-cols-2">
+        {projects.map((project) => <ProjectCard project={project} />)}
+      </div>
+    </section>
   </main>
 </BaseLayout>

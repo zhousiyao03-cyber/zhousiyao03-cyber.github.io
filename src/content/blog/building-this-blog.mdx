@@ -1,0 +1,52 @@
+---
+title: 用 Astro 把这个博客搭起来
+date: 2026-05-24
+summary: 技术选型与取舍：为什么是 Astro + MDX + Tailwind，以及为什么先不上 AI。
+tags: [前端, Astro, 折腾记录]
+---
+
+承接上一篇，记一下这个博客的搭法和当时的取舍。
+
+## 选型
+
+目标很简单：**个人品牌 + 写作记录**。所以核心诉求是「写文章爽、发布顺手、加载快、SEO 好」，而不是炫技。
+
+最后定了：
+
+| 关注点 | 选型 |
+| --- | --- |
+| 框架 | Astro 5 |
+| 文章 | MDX |
+| 样式 | Tailwind CSS v4 |
+| 部署 | GitHub Pages |
+
+为什么是 Astro 而不是 Next.js？因为这是个**内容站**——Astro 默认不发 JS，构建出来就是一堆静态 HTML，快得离谱，SEO 天然友好。需要交互的地方再用 island 单独加，不用为了几个动态点把整站变成 SPA。
+
+## 内容怎么管
+
+用 Astro 的 content collections，frontmatter 用 zod 校验，类型安全：
+
+```ts
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.mdx', base: './src/content/blog' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    summary: z.string(),
+    tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
+  }),
+});
+```
+
+写文章 = 丢一个 `.mdx` 文件 + `git push`。GitHub Actions 自动构建、部署，几十秒后就上线了。
+
+## 为什么先不上 AI
+
+本来想做个「跟我的博客对话」的功能——把文章喂给 Claude，让访客直接问。技术上不难（轻量 RAG + prompt caching 就够），但它需要一个服务端接口，而 GitHub Pages 只能托管静态文件。
+
+权衡下来：**v1 先把内容站做扎实**，AI 留到以后单独做，接口挂到自己的服务器上。先能写、能发、好看，比什么都重要。
+
+## 小结
+
+整套东西零成本、零运维，推一次代码自动上线。够用，且舒服。
