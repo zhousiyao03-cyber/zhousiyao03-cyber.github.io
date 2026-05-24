@@ -32,6 +32,8 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
     <meta property="og:description" content={description} />
     <meta property="og:type" content={article ? 'article' : 'website'} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={SITE.title} />
+    <meta property="og:locale" content="zh_CN" />
     <meta name="twitter:card" content="summary_large_image" />
     <script is:inline>
       (() => {

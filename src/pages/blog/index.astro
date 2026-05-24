@@ -10,7 +10,12 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
 <BaseLayout title="Blog" description="全部文章">
   <main id="main" class="mx-auto max-w-2xl px-4 py-14">
     <h1 class="text-2xl font-bold tracking-tight">Blog</h1>
-    <p class="mt-2 font-mono text-sm text-zinc-500 dark:text-zinc-400">{posts.length} 篇文章</p>
+    <div class="mt-2 flex items-center gap-3 font-mono text-sm text-zinc-500 dark:text-zinc-400">
+      <span>{posts.length} 篇文章</span>
+      <a href="/blog/tags" class="transition-colors hover:text-accent dark:hover:text-accent-soft">
+        · 按标签浏览 →
+      </a>
+    </div>
     <div class="mt-8 divide-y divide-zinc-100 dark:divide-zinc-800/70">
       {posts.map((post) => <PostCard post={post} />)}
     </div>
