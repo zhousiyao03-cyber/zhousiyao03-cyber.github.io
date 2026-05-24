@@ -17,7 +17,7 @@ const projects = (await getCollection('projects', ({ data }) => data.featured)).
   <main id="main" class="mx-auto max-w-2xl px-4 py-14">
     {/* Hero */}
     <section>
-      <h1 class="text-4xl font-bold tracking-tight">嗨，我是 {SITE.title}</h1>
+      <h1 class="text-4xl font-bold tracking-tight text-balance">嗨，我是 {SITE.title}</h1>
       <p class="mt-2 font-mono text-sm text-accent dark:text-accent-soft">{SITE.role}</p>
       <p class="mt-5 leading-relaxed text-zinc-600 dark:text-zinc-300">{SITE.description}</p>
       <div class="mt-5 flex gap-4 font-mono text-[13px]">
