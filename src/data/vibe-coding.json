@@ -1,0 +1,124 @@
+{
+  "daily": {
+    "2026-03-14": {
+      "cost": 12.64,
+      "tokens": 19457714,
+      "models": [
+        "gpt-5.4"
+      ]
+    },
+    "2026-03-16": {
+      "cost": 8.53,
+      "tokens": 13576312,
+      "models": [
+        "gpt-5.4"
+      ]
+    },
+    "2026-03-17": {
+      "cost": 1.68,
+      "tokens": 3286476,
+      "models": [
+        "gpt-5.4"
+      ]
+    },
+    "2026-04-24": {
+      "cost": 14.45,
+      "tokens": 11435001,
+      "models": [
+        "claude-opus-4-7"
+      ]
+    },
+    "2026-04-25": {
+      "cost": 107.97,
+      "tokens": 81449648,
+      "models": [
+        "claude-opus-4-7",
+        "claude-sonnet-4-6"
+      ]
+    },
+    "2026-04-26": {
+      "cost": 163.98,
+      "tokens": 212537296,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-7",
+        "claude-sonnet-4-6"
+      ]
+    },
+    "2026-04-27": {
+      "cost": 64.29,
+      "tokens": 83572879,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-7"
+      ]
+    },
+    "2026-04-28": {
+      "cost": 41.32,
+      "tokens": 45220667,
+      "models": [
+        "claude-opus-4-7"
+      ]
+    },
+    "2026-04-29": {
+      "cost": 44.3,
+      "tokens": 71500294,
+      "models": [
+        "claude-opus-4-7"
+      ]
+    },
+    "2026-05-06": {
+      "cost": 10.55,
+      "tokens": 9259294,
+      "models": [
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-7"
+      ]
+    },
+    "2026-05-23": {
+      "cost": 23.42,
+      "tokens": 28078768,
+      "models": [
+        "claude-opus-4-7"
+      ]
+    },
+    "2026-05-24": {
+      "cost": 357.57,
+      "tokens": 542875945,
+      "models": [
+        "claude-opus-4-7",
+        "claude-sonnet-4-6"
+      ]
+    },
+    "2026-05-25": {
+      "cost": 5.65,
+      "tokens": 5415784,
+      "models": [
+        "claude-opus-4-7"
+      ]
+    }
+  },
+  "totalTokens": 1127666078,
+  "totalCost": 856.35,
+  "avgWeekCost": 82.12,
+  "numDays": 13,
+  "models": [
+    {
+      "name": "Opus 4.7",
+      "color": "#818cf8"
+    },
+    {
+      "name": "Sonnet 4.6",
+      "color": "#f472b6"
+    },
+    {
+      "name": "Haiku 4.5",
+      "color": "#38bdf8"
+    },
+    {
+      "name": "GPT-5",
+      "color": "#22d3ee"
+    }
+  ],
+  "updatedAt": "2026-05-25"
+}

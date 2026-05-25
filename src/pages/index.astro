@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import VibeCoding from '../components/VibeCoding.astro';
 import { SITE, SOCIAL } from '../config';
 
 const posts = (await getCollection('blog', ({ data }) => !data.draft))
@@ -31,6 +32,9 @@ const projects = (await getCollection('projects', ({ data }) => data.featured)).
         ))}
       </div>
     </section>
+
+    {/* Vibe Coding 用量 */}
+    <VibeCoding />
 
     {/* 最新文章 */}
     <section class="mt-16">

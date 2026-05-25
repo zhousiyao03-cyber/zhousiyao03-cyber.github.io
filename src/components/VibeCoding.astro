@@ -1,0 +1,205 @@
+---
+/**
+ * Vibe Coding 用量卡片：展示通过 AI CLI（Claude Code / Codex 等）写代码的
+ * token / 花费统计 + GitHub 风格热力图 + 模型色点图例。
+ *
+ * 数据来自 src/data/vibe-coding.json（由 scripts/gen-vibe-coding.mjs 用 ccusage 生成）。
+ * 构建期注入，线上零运行时请求。更新：重跑脚本 → commit json → push。
+ */
+import data from '../data/vibe-coding.json';
+
+type Day = { cost: number; tokens: number; models: string[] };
+const daily = data.daily as Record<string, Day>;
+
+/** 大数格式化：1.13B / 542.9M / 19.5K */
+function fmtTokens(n: number): string {
+  if (n >= 1e9) return (n / 1e9).toFixed(2) + 'B';
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+  return String(n);
+}
+
+// ── 构建热力图网格：以「最近 N 周、每列一周、周日→周六」排布 ──
+const WEEKS = 18; // 展示最近 18 周（约 4 个月）
+const DAY_MS = 86400000;
+
+// 网格末尾对齐到本周六，往前推 WEEKS*7 天
+const today = new Date(data.updatedAt + 'T00:00:00');
+const end = new Date(today);
+end.setDate(end.getDate() + (6 - end.getDay())); // 本周六
+const start = new Date(end);
+start.setDate(start.getDate() - (WEEKS * 7 - 1)); // 含当天共 WEEKS 周
+
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+
+// token 数分 5 档（0=无活动），用于热力图颜色深浅
+const tokenVals = Object.values(daily).map((d) => d.tokens);
+const maxTok = Math.max(1, ...tokenVals);
+function level(tok: number): number {
+  if (!tok) return 0;
+  const r = tok / maxTok;
+  if (r > 0.6) return 4;
+  if (r > 0.3) return 3;
+  if (r > 0.1) return 2;
+  return 1;
+}
+
+// 按周分列
+type Cell = { date: string; tokens: number; cost: number; level: number; future: boolean };
+const weeks: Cell[][] = [];
+const cur = new Date(start);
+const todayIso = iso(today);
+for (let w = 0; w < WEEKS; w++) {
+  const col: Cell[] = [];
+  for (let d = 0; d < 7; d++) {
+    const key = iso(cur);
+    const entry = daily[key];
+    col.push({
+      date: key,
+      tokens: entry?.tokens ?? 0,
+      cost: entry?.cost ?? 0,
+      level: level(entry?.tokens ?? 0),
+      future: key > todayIso,
+    });
+    cur.setTime(cur.getTime() + DAY_MS);
+  }
+  weeks.push(col);
+}
+
+const fmtDate = (s: string) =>
+  new Date(s + 'T00:00:00').toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+---
+
+<section class="mt-16" aria-labelledby="vc-heading">
+  <div class="flex items-baseline justify-between">
+    <h2 id="vc-heading" class="font-mono text-sm uppercase tracking-widest text-zinc-400">
+      // Vibe Coding
+    </h2>
+    <span class="font-mono text-[13px] text-zinc-500">
+      近 {data.numDays} 天 · 截至 {data.updatedAt}
+    </span>
+  </div>
+
+  <div
+    class="mt-5 rounded-xl border border-zinc-200/70 p-5 dark:border-zinc-800/70"
+    data-vc-card
+  >
+    {/* 三个统计数字 */}
+    <div class="grid grid-cols-3 gap-2 text-center">
+      <div>
+        <div class="font-mono text-2xl font-semibold tracking-tight tabular-nums">
+          {fmtTokens(data.totalTokens)}
+        </div>
+        <div class="mt-1 font-mono text-[11px] uppercase tracking-wider text-zinc-400">Tokens</div>
+      </div>
+      <div>
+        <div class="font-mono text-2xl font-semibold tracking-tight tabular-nums">
+          ${Math.round(data.totalCost).toLocaleString()}
+        </div>
+        <div class="mt-1 font-mono text-[11px] uppercase tracking-wider text-zinc-400">Cost</div>
+      </div>
+      <div>
+        <div class="font-mono text-2xl font-semibold tracking-tight tabular-nums">
+          ${Math.round(data.avgWeekCost).toLocaleString()}
+        </div>
+        <div class="mt-1 font-mono text-[11px] uppercase tracking-wider text-zinc-400">
+          Avg/Week
+        </div>
+      </div>
+    </div>
+
+    {/* 热力图 */}
+    <div class="mt-6 flex justify-center gap-[3px] overflow-x-auto pb-1">
+      {
+        weeks.map((col) => (
+          <div class="flex flex-col gap-[3px]">
+            {col.map((cell) => (
+              <div
+                class:list={[
+                  'vc-cell h-[11px] w-[11px] rounded-[2px]',
+                  `vc-l${cell.level}`,
+                  cell.future && 'opacity-0',
+                ]}
+                data-tip={
+                  cell.future || cell.tokens === 0
+                    ? null
+                    : `${fmtDate(cell.date)} · $${cell.cost.toFixed(2)} · ${fmtTokens(cell.tokens)} tokens`
+                }
+              />
+            ))}
+          </div>
+        ))
+      }
+    </div>
+
+    {/* 模型图例 + 工具 */}
+    <div class="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[12px] text-zinc-500 dark:text-zinc-400">
+      {
+        data.models.map((m) => (
+          <span class="inline-flex items-center gap-1.5">
+            <span class="h-2 w-2 rounded-full" style={`background:${m.color}`} />
+            {m.name}
+          </span>
+        ))
+      }
+      <span class="ml-auto text-zinc-400 dark:text-zinc-500">via ccusage</span>
+    </div>
+  </div>
+
+  {/* 跟随鼠标的 tooltip */}
+  <div
+    id="vc-tooltip"
+    role="status"
+    class="pointer-events-none fixed z-50 hidden rounded-md bg-zinc-900 px-2 py-1 font-mono text-[11px] text-zinc-100 shadow-lg dark:bg-zinc-700"
+  >
+  </div>
+</section>
+
+<style>
+  /* 热力图色阶：用主题色按透明度分档，深浅自动适配明暗模式 */
+  .vc-l0 {
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+  }
+  :global(.dark) .vc-l0 {
+    background: color-mix(in srgb, #fff 6%, transparent);
+  }
+  .vc-l1 {
+    background: color-mix(in srgb, var(--color-accent) 30%, transparent);
+  }
+  .vc-l2 {
+    background: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  }
+  .vc-l3 {
+    background: color-mix(in srgb, var(--color-accent) 72%, transparent);
+  }
+  .vc-l4 {
+    background: var(--color-accent);
+  }
+  .vc-cell[data-tip] {
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  // 热力图 tooltip：hover 显示日期/花费/token，跟随鼠标
+  const tip = document.getElementById('vc-tooltip');
+  const card = document.querySelector('[data-vc-card]');
+  if (tip && card) {
+    card.addEventListener('mouseover', (e) => {
+      const cell = (e.target as HTMLElement).closest('[data-tip]');
+      if (!cell) return;
+      tip.textContent = cell.getAttribute('data-tip');
+      tip.classList.remove('hidden');
+    });
+    card.addEventListener('mousemove', (e) => {
+      if (tip.classList.contains('hidden')) return;
+      const me = e as MouseEvent;
+      tip.style.left = me.clientX + 12 + 'px';
+      tip.style.top = me.clientY - 8 + 'px';
+    });
+    card.addEventListener('mouseout', (e) => {
+      const cell = (e.target as HTMLElement).closest('[data-tip]');
+      if (cell) tip.classList.add('hidden');
+    });
+  }
+</script>
